@@ -72,14 +72,23 @@ class HotelBooking
     public Person Person { get; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public int Price { get; set; }
+    public double Price = 1999;
+    public double TotalCost { get; set; }
 
     public HotelBooking(Person person, DateTime startDate, int lengthOfStayInDays)
     {
         Person = person;
         StartDate = startDate.Add(new TimeSpan(15, 0, 0));
         EndDate = StartDate.AddDays(lengthOfStayInDays).Date.Add(new TimeSpan(12, 0, 0));
-        Price = 1999 * lengthOfStayInDays;
+        if (lengthOfStayInDays > 10)
+        {
+            Price = Price * 0.9;
+        }
+        else if (lengthOfStayInDays > 30)
+        {
+            Price = Price * 0.8;
+        }
+        TotalCost = Math.Round(Price * lengthOfStayInDays,2);
     }
     public void ShowBookingDetails()
     {
@@ -92,7 +101,7 @@ class HotelBooking
         Console.WriteLine($"Telefonnr: {Person.PhoneNumber}");
         Console.WriteLine($"Start datum: {StartDate}");
         Console.WriteLine($"Slut datum: {EndDate}");
-        Console.WriteLine($"Priset blir: {Price}kr");
+        Console.WriteLine($"Priset blir: {TotalCost}kr");
 
     }
 }
