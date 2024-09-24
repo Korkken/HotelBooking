@@ -1,17 +1,42 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 MainProgram();
 void MainProgram()
 {
-    Console.WriteLine("Hej, vad är ditt för och efternamn");
-    string? namn = Console.ReadLine();
+    int numberOfGuests;
+    Console.WriteLine("Hur många personer vill du boka för?");
+    while (!int.TryParse(Console.ReadLine(), out numberOfGuests))
+    {
+        Console.WriteLine("Skriv in i formatet ÅÅÅÅ-MM-DD");
+    }
+    string[] names = new string[numberOfGuests];
+    if (numberOfGuests > 1)
+    {
+        Console.WriteLine("Här får du skriva in alla namn till bokningen");
+        for (int t = 0; t < numberOfGuests; t++)
+        {
+            Console.WriteLine($"Ange namn av gäst nr: {t + 1}");
+            names[t] = Console.ReadLine();
+        }
+    }
+    else
+    {
+        Console.WriteLine("Skriv in ditt förnamn och efternamn, tack.");
+        names[0] = Console.ReadLine();
+    }
+
+    
+
     Console.WriteLine("Vad är din epost adress");
     string email = Console.ReadLine();
+
     Console.WriteLine("Vad är ditt telefonnummer?");
     string nummer = Console.ReadLine();
-    Person person = new Person(namn, email, nummer);
+
+    Person person = new Person(names, email, nummer);
 
     Console.WriteLine("Från när vill du boka hotelrummet?");
     DateTime startDate;
@@ -58,7 +83,11 @@ class HotelBooking
     }
     public void ShowBookingDetails()
     {
-        Console.WriteLine($"Namn: {Person.Name}");
+        foreach (var name in Person.Names)
+        {
+            Console.WriteLine($"Namn: {name}");
+        }
+
         Console.WriteLine($"Epost: {Person.Email}");
         Console.WriteLine($"Telefonnr: {Person.PhoneNumber}");
         Console.WriteLine($"Start datum: {StartDate}");
@@ -69,16 +98,16 @@ class HotelBooking
 }
 class Person
 {
-    public string Name { get; set; }
+    public string[] Names { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
 
-    public Person(string name, string email, string phoneNumber ) 
-        {
-        Name = name;
+    public Person(string[] names, string email, string phoneNumber)
+    {
+        Names = names;
         Email = email;
         PhoneNumber = phoneNumber;
-        }
+    }
 }
 
 
